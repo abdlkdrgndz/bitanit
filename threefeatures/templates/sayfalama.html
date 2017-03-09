@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<ul>
+{% for foo in veriler %}
+        <li>{{ foo }}</li>
+{% endfor %}
+
+{% for sayi in aralik %}
+    <a href="?s={{ sayi }}"> {{ sayi }} </a>
+{% endfor %}
+
+
+    <form action="" method="post">
+    {% csrf_token %}
+{% for foo in formlar %}
+ {{ foo.label_tag }}
+ {{ foo.help_text }}
+    {{ foo }}
+    {{ foo.html_name }}
+   {% if formlar.errors %}
+        {{ formlar.hizmet_adi.errors }}
+   {% endif %}
+     
+
+{% endfor %}
+        <input type="submit">
+</form>
+
+    <hr>
+
+
+</ul>
+</body>
+</html>

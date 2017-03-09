@@ -1,0 +1,204 @@
+{% extends "iskelet.html" %}
+{% load static from staticfiles %}
+{% block ucretsizler %}
+
+{% endblock %}
+
+{% block analiz %}
+
+{% endblock %}
+
+{%  if user.authenticated %}
+{% block mekan_listesi %}
+
+<div class="container margin-top-10">
+    {% if request.POST %}
+        {% if form.errors %}
+    <div class="alert alert-danger" role="alert"><span class="text-center">Güncelleme İşlemi Gerçekleşmedi. <br> Form Bilgileri Geçersiz.</span></div>
+        {% else %}
+    <div class="alert alert-success" role="alert"><span class="text-center">Güncelleme İşlemi Gerçekleşti. <br> </span></div>
+        {% endif %}
+    {% endif %}
+<div class="row well well-lg">
+<table class="table table-condensed">
+<h1 class="text-center text-shadow">KAYITLI MEKAN LİSTESİ</h1>
+<p style="border-bottom: 2px dashed gray;"></p>
+<tr style="text-transform: uppercase;">
+  <td class="danger"><strong>Mekan Adı</strong></td>
+  <td class="success"><strong>Hizmet Alanı</strong></td>
+  <td class="warning"><strong>Hizmet Tipi</strong></td>
+  <td class="danger"><strong>Mekan İli</strong></td>
+  <td class="warning"><strong>Onay Durumu</strong></td>
+  <td class="success"><strong>İşlem</strong></td>
+
+</tr>
+{% for mekan in mekan_listesi %}
+  <tr>
+  <td>{{ mekan.mekan_adi|capfirst }}</td>
+  <td>{{ mekan.hizmet_id }}</td>
+  <td>{{ mekan.hizmet_tip_id }}</td>
+  <td>{{ mekan.il_id }}</td>
+  <td>{% if mekan.mekan_onay == '0' %}
+            <p class="icon-edit">Onaylanmamış</p>
+      {% else %}
+            <p>Onaylı</p>
+      {% endif %}
+</td>
+<td>
+      <!--
+       Deleteview POST ile çalışıyor çünkü chrome siteler hızlı açılsın diye önceden linkleri getliyor. Eğer deleteview get ile çalışsaydı chrome bütün mekanları yanlışlıkla silerdi.
+       Deletiview ayrıca silmek istiyormusun şeklinde bir soru sorar bunun için GET methodunu kullanman gerekli. eğer direk sileceksen POST kullanacaksın.
+       -->
+      <a class="btn btn-danger" style="margin: 5px;" href="{% url "Mekan_Sil" pk=mekan.pk %}">Sil</a>
+      <a class="btn btn-warning" style="margin: 5px;" href="{% url "Mekan_Duzenle" pk=mekan.pk %}">Düzenle</a>
+  </td>
+
+</tr>
+    {% endfor %}
+</table>
+
+    {% if sil %}
+
+        <div class="container">
+            <div class="row">
+                <div class="well well-lg">
+                    <p>{{ sil }} adlı kaydı silmek istediğine emin misin?</p>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                    <input  class="btn btn-success" type="submit" value="Evet"/>
+                        <input  class="btn btn-danger" onclick="window.history.go(-1);" value="Hayır"/>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    </div>
+
+    {% if guncelle %}
+        <div class="container_wrap">
+        <div class="row">
+        <div class="col-md-8 align-center well well-lg">
+        <form action="" method="post" id="duzenle" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_table }}
+            <br>
+            <input type="submit" class="btn btn-success" value="Güncelle">
+            <input class="btn btn-danger" value="İptal" onclick="window.history.go(-1);">
+        </form>
+            <br>
+        </div>
+        </div>
+        </div>
+    {% endif %}
+
+    <script>
+         $(function  () {
+
+              var secilmis =   $("#id_hizmet_tip_id option[selected]").val();
+
+              $("#id_hizmet_tip_id option").not("#id_hizmet_tip_id option:nth-of-type(" + secilmis + ")").remove();
+
+
+                $("#id_hizmet_id").on("change", function  () {
+
+                $("#id_hizmet_tip_id option").remove();
+
+                var giden = $("#id_hizmet_id").val();
+
+                $.post("{% url 'Hizmet_Tip_Sorgula' %}", {"veri":giden},
+                   function(cevap)
+                   {
+                       for(i=0; i<cevap.length; i++) {
+                           $("#id_hizmet_tip_id").append('<option value="' + cevap[i][0] +'">'  + cevap[i][1] + '</option>');
+                       }
+
+                   }, "json");
+               })
+
+
+            $(function () {
+                  var i = $("#kadim");
+
+                  if (i.length < 1) {
+                            window.location.href = "{% url 'anasayfa' %}" ;
+                  }
+            })
+
+        })
+
+        $(function () {
+            $("#duzenle input, select, textarea").addClass('form-control');
+        })
+    </script>
+</div>
+
+    <div class="container">
+
+        <div class="living_box" >
+            <div class="col-md-16 text-center" data-toggle="modal" data-target="#FirsatModal">
+            <img src="{% static "images/firsat1.png" %}" width="128" height="128" class="text-center"> </div>
+            <h2 class="text-center text-bold text-shadow text-info cursor-pointer" data-toggle="modal" data-target="#FirsatModal">Fırsat Ekle</h2>
+            </div>
+
+
+
+    </div>
+
+    <div class="modal fade" id="FirsatModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">Fırsat Ekle</h4>
+      </div>
+      <div class="modal-body">
+        <form action="" method="post">
+        {% csrf_token %}
+            <div class="form-group">
+            <label for="firsat_mekan_id" class="control-label">Mekan/Firma</label>
+                <select name="firsat_mekan_id" id="firsat_mekan_id" class="form-control">
+                   {% for mekan in mekan_listesi %}
+                       <option>{{ mekan.mekan_adi|capfirst }}</option>
+                    {% endfor %}
+                </select>
+          </div>
+          <div class="form-group">
+            <label for="firsat_foto" class="control-label">Fırsat Fotoğrafı:</label>
+            <input type="file" class="form-control" id="firsat_foto" name="firsat_foto" accept="image/*">
+          </div>
+            <div class="form-group">
+            <label for="firsat_baslangic" class="control-label">Fırsat Başlangıcı:</label>
+            <input type="datetime-local" class="form-control" id="firsat_baslangic" name="firsat_baslangic">
+            </div>
+            <div class="form-group">
+            <label for="firsat_bitis" class="control-label">Fırsat Bitiş:</label>
+            <input type="datetime-local" class="form-control" id="firsat_bitis" name="firsat_bitis">
+            </div>
+            <div class="form-group">
+            <label for="firsat_fiyat" class="control-label">Ürün/Hizmet Fiyatı:</label>
+            <input type="text" class="form-control" id="firsat_fiyat" name="firsat_fiyat">
+            </div>
+        <div class="form-group">
+            <label for="firsat_indirim_oran" class="control-label">İndirim Oranı:</label>
+            <input type="text" class="form-control" id="firsat_indirim_oran" name="firsat_indirim_oran" maxlength="3" aria-valuemax="100">
+            </div>
+
+          <div class="form-group">
+            <label for="firsat_aciklama" class="control-label">Fırsat Açıklama:</label>
+            <textarea class="form-control" id="firsat_aciklama" name="firsat_aciklama" maxlength="150"></textarea>
+          </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Send message</button>
+      </div>
+     </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% endif %}
+
+

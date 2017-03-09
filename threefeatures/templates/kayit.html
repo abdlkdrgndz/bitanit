@@ -1,0 +1,278 @@
+{% extends "iskelet.html" %}
+
+{% block analiz %}
+
+{% endblock %}
+
+{% block ucretsizler %}
+
+{% endblock %}
+
+{% block mekanlar %}
+
+{% endblock %}
+
+{% block sectiklerimiz %}
+
+
+{% endblock %}
+
+
+{% block yeniler %}
+
+{% endblock %}
+
+
+
+    {%  block mekan_kaydet %}
+
+<div class="offering">
+
+                {% block form_gonderim_sonuc %}
+                {% if request.POST %}
+                    {% if form.errors %}
+
+                    <div class="alert alert-danger" role="alert"> <b> Mekan Kaydı Yapılamadı. <br>Girmiş olduğunuz form bilgileri geçersiz. </b><br>
+                     <b class="border-bottom-yellow">
+                        {{ form.errors }}
+                        </b>
+                    </div>
+
+                    {% else %}
+                     <div class="alert alert-success" role="alert"> <b> Mekan Kaydetme İşleminiz Gerçekleşti </b> </div>
+
+                    {% endif %}
+                {% endif %}
+               {% endblock %}
+
+   		  	  <h2>Mekanı Kaydet</h2>
+   		  	  <h3>Sahibi oldugun isletmeni kaydet, diger isletmelerin önüne geç</h3>
+   		  	  <ul class="icons wow fadeInUp" data-wow-delay="0.4s">
+   		  	  	 <li><i class="icon1"> </i></li>
+   		  	  	 <li><i class="icon2"> </i></li>
+   		  	  	 <li><i class="icon3"> </i></li>
+   		  	  	 <li><i class="icon4"> </i></li>
+   		  	  	 <li><i class="icon5"> </i></li>
+   		  	  </ul>
+   		  	  <div class="real">
+   		  	  	<h4>Mekanını öne çıkaran üç özelliği belirle</h4>
+   		  	  	<div class="col-sm-4">
+   		  	  	  <ul class="service_grid">
+   	   				<i class="s1"> </i>
+   	   				 <li class="desc1 wow fadeInRight" data-wow-delay="0.4s">
+   	   				   <p>Sahibi olduğun işletmenin aynı işi yapan diğer işletmelere göre öne çıkan üç özelliğini belirleyin.</p>
+   	   				 </li>
+   	   				 <div class="clearfix"> </div>
+   	   			   </ul>
+   	   			 </div>
+   	   			 <div class="col-sm-4">
+   		  	  	  <ul class="service_grid">
+   	   				<i class="s1"> </i>
+   	   				 <li class="desc1 wow fadeInRight" data-wow-delay="0.4s">
+   	   				   <p>İşletmenizin tanıtımına ücretsiz olarak katkıda bulunun. Arama motorlarında üst sıralarda yerinizi alın.</p>
+   	   				 </li>
+   	   				 <div class="clearfix"> </div>
+   	   			   </ul>
+   	   			 </div>
+                      <div class="col-sm-4">
+                 <ul class="service_grid">
+                     <i class="s1"> </i>
+                      <li class="desc1 wow fadeInRight" data-wow-delay="0.4s">
+                        <p>Sizi öne çıkaran özellikleriniz sayesinde binlerce kullanıcıyla buluşun.</p>
+                      </li>
+                      <div class="clearfix"> </div>
+                     </ul>
+                   </div>
+   	   			 <div class="clearfix"> </div>
+   	   			 </div>
+   		  	  </div>
+ {% if user.is_authenticated %}
+<form enctype="multipart/form-data" method="POST" action="{%  url 'Mekan_Kayit_Sayfasi' %}" name="Go">
+{% csrf_token %}
+ <div class="living_middle wow fadeInUp" data-wow-delay="0.4s" style="background :  rgba(41, 82, 109, 0.5)">
+
+   	  <div class="container">
+   	  	<h2 style="color : white ;">Mekan Sahibi</h2>
+   	  	<div class="line"></div>
+
+					<div class="to">
+                     	<input  type="text" class="text" placeholder="ADI-SOYADI" name="mekan_sahip_adi" style="color : white;"  required>
+					 	      <input type="text" class="text" placeholder="E-POSTA ADRESİ"  name="mekan_sahip_eposta" style="margin-left:15px ; color : white;" required>
+					 	<div class="clearfix"></div>
+					</div>
+						<h2 style="color : white ;">Mekan Bilgileri</h2>
+
+						<div class="line"></div>
+					 	<div class="to">
+
+                     	 <input  type="text" class="text" placeholder="MEKAN/FİRMA ADI" name="mekan_adi" style="color : white;"  required >
+                       <input type="text" class="text" placeholder="WEB-SITE(İSTEĞE BAĞLI)"  name="mekan_web_site" style="margin-left:15px ; color : white;">
+                       <input  type="text" class="text"   placeholder="MINUMUM HİZMET BEDELİ(İSTEĞE BAĞLI)"  name="mekan_fiyat" id="miktar" style="margin-left:15px ; color : white;">
+
+
+					 	</div>
+
+
+            <div class="line"></div>
+            <div class="to">
+                  <input  type="text" class="text" placeholder="MEKAN/FİRMA YETKİLİSİ" name="mekan_yetkisili" max="20" style="color : white;" required >
+                  <input  type="text" class="text" placeholder="MEKAN/FİRMA ADRESİ" name="mekan_adres" max="20" style="margin-left:15px ; color : white;" required>
+                  <input  type="text" class="text" placeholder="TELEFON" name="mekan_telefon" id="telefon" style="margin-left:15px ; color : white;" required>
+            <div class="clearfix"></div>
+            </div>
+
+            <div class="clearfix"></div>
+
+
+           <div class="line"></div>
+
+						<div class="to">
+                     	<div class="col-md-4">
+                     	<select class="new_select" tabindex="9" name="il_id" required>
+                   {% for iller in il_listesi %}
+
+                            <option value="{{ iller.id }}">{{ iller }}</option>
+
+                     {% endfor %}
+					        </select>
+
+					 	</div>
+
+					 	<div class="col-md-4">
+              <select class="new_select" id="alan" tabindex="9"  name="hizmet_id" required >
+                    {% for hizmetler in hizmet_listesi %}
+
+                     <option value="{{ hizmetler.id }}">{{  hizmetler }}</option>
+
+                    {% endfor %}
+              </select>
+
+					 	</div>
+
+					 		<div class="col-md-4">
+                     		<select id="tipler" class="new_select" tabindex="9"  name="hizmet_tip_id" required>
+
+
+                                <option></option>
+
+					        </select>
+
+                           <script>
+
+
+                        $(function  () {
+
+                                $("#alan").on("change" ,function  () {
+
+                                 $("#tipler option").remove();
+
+                                 var giden = $("#alan").val();
+
+                                $.post("{% url 'Hizmet_Tip_Sorgula' %}", {"veri":giden},
+                                                       function(cevap)
+                                                       {
+                                                           for(i=0; i<cevap.length; i++) {
+                                                               $("#tipler").append('<option value="' + cevap[i][0] +'">'  + cevap[i][1] + '</option>');
+                                                           }
+                                                           $("#tipler option:nth-last-of-type(2)").attr('selected' , 'selected');
+
+                                                       }, "json");
+                               })
+
+
+
+
+                             })
+                        </script>
+
+
+
+					 	</div>
+
+
+						<div class="clearfix"></div>
+					 	<h2 style="color : white ; margin-top : 30px;">Sizi Öne Çıkaran 3  Özellik</h2>
+						<div class="line"></div>
+					 	<div class="to">
+                     	<input  type="text" class="text" placeholder="20 Karakteri Geçmeyiniz" name="mekan_ozellik1" max="20" style="color : white;" required >
+      					 	<input  type="text" class="text" placeholder="20 Karakteri Geçmeyiniz" name="mekan_ozellik2" max="20" style="margin-left:15px ; color : white;" required>
+      					 	<input  type="text" class="text" placeholder="20 Karakteri Geçmeyiniz" name="mekan_ozellik3" max="20" style="margin-left:15px ; color : white;" required>
+					 	<div class="clearfix"></div>
+                            <script>
+                                $(function () {
+                                    $("input[name=mekan_ozellik1], input[name=mekan_ozellik2], input[name=mekan_ozellik3]").keyup(function () {
+                                        var hesapla = $(this).val().length;
+                                        if (hesapla > 1 && hesapla <= 20 ) {
+                                            $(this).removeClass('border-red');
+                                            $(this).addClass('border-green');
+                                        }
+                                        else if(hesapla == 0) {
+                                            $(this).removeClass('border-green');
+                                            $(this).removeClass('border-red');
+                                        }
+                                        else {
+                                            $(this).removeClass('border-green');
+                                            $(this).addClass('border-red');
+                                        }
+                                    })
+                                })
+                            </script>
+						</div>
+
+					 	<div class="clearfix"></div>
+						<h2 style="color : white ; margin-top : 30px;">Fotograf Yükleyin</h2>
+						<div class="line"></div>
+
+			                <input  class="file" type="file" name="mekan_foto" multiple data-min-file-count="1" data-max-file-count="1" required data-toggle="tooltip" data-placement="bottom" title="Fotoğraf boyutu 1MB altında olmalıdır.">
+
+                            <script>
+                                	$(function  () {
+
+                                    $(".fileinput-upload-button").hide();
+
+                                    $("input[name=kayit]").click(function  () {
+                                        $(".fileinput-upload-button").show();
+                                        $(".fileinput-upload-button").trigger('click');
+                                       $(".fileinput-upload-button").hide();
+                                    });
+
+                                    	})
+                            </script>
+
+			                <br>
+					<div class="text">
+	                   <textarea placeholder="MEKAN/FİRMA TANITIM AÇIKLAMASI" name="mekan_tanitim" style="color: white;" required></textarea>
+                        <input readonly value="{{ user.id }}" style="opacity: 0;" name="mekan_ekleyen">
+	                </div>
+                        <input type="text" name="title" style="opacity: 0;">
+	                <div class="form-submit1">
+                        <div class="clearfix"></div>
+			           <input name="kayit" type="submit" id="submit" value="KAYDET" class="btn btn-success">
+                        <script>
+                            $(function () {
+                                $("input[name=mekan_adi]").keyup(function () {
+                                    var slug = $("input[name=mekan_adi]").val();
+                                    $("input[name=title]").attr("value", slug);
+                                })
+
+                                 setInterval(function(){
+                                    var slug = $("input[name=mekan_adi]").val();
+                                    $("input[name=title]").attr("value", slug);
+			                     }, 10);
+                            })
+
+
+                        </script>
+					</div>
+					<div class="clearfix"></div>
+   	  </div>
+
+   </div>
+   </div>
+</form>
+{% else %}
+     <div class="alert alert-info text-center text-bold">Mekan kayıt işlemi yapabilmek için lütfen üye girişi yapın.</div>
+{% endif %}
+{% endblock %}
+
+

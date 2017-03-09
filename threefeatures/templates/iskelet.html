@@ -1,0 +1,869 @@
+{% load static from staticfiles %}
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>bitanıt</title>
+<meta charset='utf-8'>
+
+    <!-- CSS DOSYALARI VE FONTLAR -->
+<link href="{% static 'css/bootstrap.css' %}" rel='stylesheet' type='text/css' />
+<link href="{% static 'css/style.css' %}?v.1.0.0.6" rel='stylesheet' type='text/css' />
+<link href="{% static 'css/animate.css' %}" rel='stylesheet' type='text/css' />
+<link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+<link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+
+
+
+    <!-- RESPONSIVE-->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+
+    <!--JS DOSYALARI-->
+
+<script type="text/javascript" src=" {% static 'js/jquery-1.11.3.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/login.js' %}"></script>
+<script src="{% static 'js/jquery.easydropdown.js' %}"></script>
+<script src="{% static 'js/wow.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js'%}"></script>
+<script src="{% static 'js/animate.js'%}?v=1.0.4"></script>
+<script src="{% static 'js/jquery.maskedinput.min.js'%}" type="text/javascript"></script>
+<script src="{% static 'js/jquery.price_format.2.0.min.js'%}" type="text/javascript"></script>
+<script src="{% static 'js/jquery.countdown.js'%}" type="text/javascript"></script>
+
+
+    <!-- RATING STAR -->
+    <link href="{% static 'css/rating/css/style.css' %}?v1.0"  rel="stylesheet" type="text/css" />
+    <script src="{% static 'css/rating/js/index.js' %}" type="text/javascript"></script>
+
+
+	<!--  file input  -->
+<link href="{% static 'css/input/css/fileinput.css' %}" media="all" rel="stylesheet" type="text/css" />
+
+
+<script src="{% static 'css/input/js/fileinput.min.js' %}  " type="text/javascript"></script>
+<script src="{% static 'css/input/js/fileinput_locale_fr.js' %}  " type="text/javascript"></script>
+<script src="{% static 'css/input/js/fileinput_locale_es.js' %} " type="text/javascript"></script>
+
+<script>
+    jQuery(function($){
+   $("#telefon").mask("(999) 999-9999", {placeholder:"(___) ___-____"});
+
+});
+    $(function () {
+        $('#miktar, #firsat_fiyat').priceFormat({
+            prefix: '',
+            thousandsSeparator: ''
+        });
+    })
+</script>
+
+<script>
+	new WOW().init();
+
+</script>
+
+
+</head>
+<body>
+<h1> {{ bilgi|upper }}</h1>
+     {% block header %}
+
+         <div class="header">
+		   <div class="col-sm-8 header-left">
+					 <div class="logo">
+						<a href="{% url 'anasayfa' %}"><img src="{% static 'images/logo.png' %}" width="100" height="50" /></a>
+					 </div>
+            <!--   {% if user.is_authenticated %}
+                   {% if sonuc_durum == 'basarili' %}
+               <div class="menu">
+						  <a class="toggleMenu" href="#"><img src="images/nav.png" alt="" /></a>
+						    <ul class="nav" id="nav">
+						    	<li><a href="#" class="levi"> <img src="{% static 'images/firsat_ekle.png' %}">Fırsat Ekle</a></li>
+								<div class="clearfix"></div>
+							</ul>
+							<script type="text/javascript" src="js/responsive-nav.js"></script>
+				    </div>
+                    {% endif %}
+               {% endif %}
+ -->
+                        <div class="search-box">
+							<div id="sb-search" class="sb-search">
+								<form>
+                                    <a href="{% url 'Mekan_Listesi' %}"><span class="sb-icon-search btn-info" title="Kayıtlı Mekanlarına Gözat"> </span></a>
+								</form>
+
+							</div>
+						</div>
+
+			   <div class="clearfix"></div>
+	    	    </div>
+	            <div class="col-sm-4 header_right">
+	    		      <div id="loginContainer">
+                          <a href="#" id="loginButton" style="text-decoration: none;"><span>GİRİŞ</span></a>
+                         <a id="kayit_ol" class="btn btn-warning pull-right"  style="color: #fff;" href="{% url 'Kullanici_Kayit' %}">Üye Ol</a>
+                            {%  if user %}
+                                <img src="{% static 'images/login.png' %}" id="user_logo" class="pull-right" data-toggle="modal" data-target="#exampleModal3">
+                                <p class="pull-right btn btn-succes" id="kadim" style="color:white;">{{ user }}</p>
+                                <a href="{% url 'Kullanici_Cikis' %}" style="font-size: 9px;" id="cikis_yazi" class="pull-right">Çıkış</a>
+                            {% endif %}
+
+                          <script>
+
+                              $(function () {
+                                 var sec = $("#kadim");
+                                 var sec2 = $("#cikis_yazi");
+
+                                  if(sec.text() == 'AnonymousUser') {
+                                      sec.remove();
+                                      sec2.remove();
+                                      $("#user_logo").remove();
+                                      $(".search-box").remove();
+                                  } else {
+                                      $("#kayit_ol").remove();
+                                      $("#sifremi_unuttum").remove();
+                                  }
+                              })
+                          </script>
+						    <div id="loginBox">
+						        <form id="loginForm" action="{% url 'Kullanici_Giris' %}" method="POST" >
+                                    {% csrf_token %}
+						                <fieldset id="body">
+						                	<fieldset>
+						                          <label for="email">Kullanıcı Adı veya E-Posta Adresi</label>
+						                          <input type="text" name="giris_eposta" id="email" required>
+						                    </fieldset>
+						                    <fieldset>
+						                            <label for="password">Şifre</label>
+						                            <input type="password" name="giris_sifre" id="password" required>
+						                     </fieldset>
+						                    <input type="submit" name="giris_yap" value="Giriş">
+						                	<label id="sifremi_unuttum" style="clear: both;  cursor:pointer;">  <i><a href="{% url 'account_reset_password' %}">Şifremi Unuttum</a></i></label>
+						            	</fieldset>
+
+							      </form>
+				              </div>
+			             </div>
+		                 <div class="clearfix"></div>
+	                 </div>
+	                <div class="clearfix"></div>
+    </div>
+
+     {% endblock %}
+
+      <div class="banner">
+   	  <div class="container_wrap">
+   		<h1 class="lobster">Ne aramak istiyorsun?</h1>
+
+		  <form action="{% url 'Mekan_Arama' %}" method="POST">
+			  {% csrf_token  %}
+   	       			<div class="dropdown-buttons">
+            		  <div class="dropdown-button">
+            			<select class="new_select" tabindex="9" name="iller" >
+
+						      {% for il in il_listesi %}
+								<option>{{ il }}</option>
+							  {% endfor %}
+
+
+					  </select>
+					</div>
+				     <div class="dropdown-button">
+					  <select class="new_select" tabindex="9" name="hizmetler">
+
+						  {% for hizmet in hizmet_listesi %}
+							<option>{{ hizmet }}</option>
+						  {% endfor %}
+
+					  </select>
+					 </div>
+				   </div>
+
+				<input type="text" name="aramalar" placeholder="anahtar kelime, isim veya mekan adı...">
+			    <div class="contact_btn">
+	               <label class="btn1 btn-2 btn-2g btn-info"><input type="submit" name="gonder" value="ARA"></label>
+	               <label class="btn1 btn-2 btn-2g btn-success" id="mekan_kayit_buton"><a  name="kaydet" style="color:white; text-decoration: none;" href="{% url 'Mekan_Kayit_Sayfasi' %}">KAYIT </a></label>
+
+	            </div>
+		</form>
+   		    <div class="clearfix"></div>
+         </div>
+
+    </div>
+
+
+
+     {% block register %}
+
+
+
+     {% endblock %}
+
+
+     {% if kullanici_yok %}
+            <div class="alert alert-danger text-center wow fadeInDown" data-wow-delay="0.2s" role="alert"><strong>Hatalı kullanıcı adı veya şifre girdiniz.</strong></div>
+
+     {% elif email_yok %}
+            <div class="alert alert-danger" role="alert"><span class="text-center">{{ email_yok }}</span></div>
+
+     {% elif email_gitti %}
+            <div class="alert alert-success" role="alert"><span class="text-center">{{ email_gitti }}</span></div>
+
+     {% elif email_gitmedi %}
+            <div class="alert alert-danger" role="alert"><span class="text-center">{{ email_gitmedi }}</span></div>
+
+     {% elif parola_degisti %}
+            <div class="alert alert-success" role="alert"><span class="text-center">Kullanıcı parolanız değiştirildi.</span></div>
+
+     {%  endif %}
+
+     {%  block guncelle_kadi %}
+
+     {% endblock %}
+
+
+
+
+     {% block mekan_listesi %}
+
+
+     {% endblock %}
+
+      {% block parola_sifirla %}
+
+     {% endblock %}
+
+
+     {% block analiz %}
+         <div class="living_middle col-md-16 align-center" >
+         <div class="container margin-top-15 ">
+         <div class="row ">
+              <div class="col-sm-6 col-md-4 wow fadeInRightBig" data-wow-delay="0.4s">
+                    <div class="thumbnail box-shadow">
+                      <img src="{% static 'images/yer.png' %}" alt="mekan bilgileri">
+                      <div class="caption">
+                        <h1 class="text-center text-info levi">
+                            {{ hizmet_say }} <br> HİZMET ALANI
+                        </h1>
+                      </div>
+                    </div>
+              </div>
+
+             <div class="col-sm-6 col-md-4 wow fadeInRightBig" data-wow-delay="0.6s">
+                    <div class="thumbnail box-shadow">
+                      <img src="{% static 'images/hizmet.png' %}" alt="mekan bilgileri">
+                      <div class="caption">
+                        <h1 class="text-center text-info levi">
+                            {{ hizmet_turleri }} <br>HİZMET TÜRÜ
+                        </h1>
+                      </div>
+                    </div>
+              </div>
+
+             <div class="col-sm-6 col-md-4 wow fadeInRightBig" data-wow-delay="0.8s">
+                    <div class="thumbnail box-shadow">
+                      <img src="{% static 'images/mekan.png' %}" alt="mekan bilgileri">
+                      <div class="caption">
+                        <h1 class="text-center text-info levi">
+                            {{ mekan_say }} <br> MEKAN/FİRMA
+                        </h1>
+                      </div>
+                    </div>
+              </div>
+         </div>
+         </div>
+         </div>
+
+     {% endblock %}
+
+
+
+         {% block ucretsizler %}
+            <div class="clearfix"></div>
+              <div class="container margin-top-15 wow fadeInLeft" data-wow-delay="0.4s">
+                <h1 class="text-center text-shadow none-select text-effect-02 font-special" id="nedir"><img
+                        src="{% static 'images/vitrin.png' %}" class="margin-05" width="36" height="36" >  VİTRİN</h1>
+                 <script>
+                     $(function () {
+                         $("#nedir").click(function () {
+                             $("#nedir_acikla").fadeToggle(300);
+                         })
+                     })
+                 </script>
+             <div class="panel panel-default" style="display: none;" id="nedir_acikla">
+                 <div class="jumbotron ">
+                     <img src="{% static "images/vitrin_bilgi.png" %}" alt="Vitrin Bilgisi" class="pull-right">
+                      <h1 class="text-danger">Merhaba, Tanıtım Dünyasına Hoşgeldin!</h1>
+                      <p class="text-bold text-info text-justify">bitanıt tarafından mekan/işletme sahipleri ve freelance üyeler için hazırlamış olduğumuz hizmetlerden bitanit.com'a üye olarak talepte bulunabilir ve ücretsiz bir şekilde bu tanıtımlardan yararlanabilirsiniz. bitanıt, belirleyeceği işletme/mekan sahibi veya freelancer üyelerine bu hizmetleri ücretsiz olarak sağlamaktadır.</p>
+                    <!--  <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p> -->
+                </div>
+             </div>
+
+                 {% for ucretsiz_hizmetlerim in ucretsiz_hizmetler %}
+
+             <form action="javascript:void(0);">
+                            {% csrf_token %}
+                      <div class="col-sm-4 col-md-3">
+                        <div class="thumbnail">
+                                <video class="img-responsive" controls>
+                                <source src="{% static "" %}{{ ucretsiz_hizmetlerim.foto_video }}" type="video/mp4">
+                                </video>
+                          <div class="caption">
+                            <p class="text-center text-bold">
+                                <img src="{% static 'images/bilgi.png' %}" width="36" height="36" data-toggle="popover" data-placement="top"  title="VIDEO AÇIKLAMA" data-content="{{ ucretsiz_hizmetlerim.aciklama }}" class="cursor-pointer">
+                                 </p>
+                              <div class="caption align-center" id="tavsiye_alanlar">
+                                   {% for tavsiyeler in ucretsiz_hizmetlerim.ilgili_hizmet.all %}
+                                              <span class="label label-success"> {{ tavsiyeler }}</span>
+                                   {% endfor %}
+                              </div>
+                              <script>
+                                  $(function () {
+                                      $("#tavsiye_alanlar span:nth-child(1)").addClass('label label-success');
+                                      $("#tavsiye_alanlar span:nth-child(2)").addClass('label label-info');
+                                      $("#tavsiye_alanlar span:nth-child(3)").addClass('label label-danger');
+                                      $("#tavsiye_alanlar span:nth-child(4)").addClass('label label-warning');
+                                  })
+                              </script>
+                          <div class="container">
+                              <div class="text-warning firsat">
+                              </div>
+                          </div>
+                              <nav>
+                                  <ul class="pager">
+                                      <li class="next ">
+                                          <img src="{% static 'images/zaman.png' %}" class="float-left margin-05" width="24" height="24" id="zaman">
+                                          <h4 class="time-and-date text-bold center float-left padding-top-05 border-dashed color-gray">{{ ucretsiz_hizmetlerim.ilgili_hizmet_sure.month|stringformat:"02d" }}/{{ ucretsiz_hizmetlerim.ilgili_hizmet_sure.day|stringformat:"02d" }}/{{ ucretsiz_hizmetlerim.ilgili_hizmet_sure.year }} {{ ucretsiz_hizmetlerim.ilgili_hizmet_sure.hour }}:{{ ucretsiz_hizmetlerim.ilgili_hizmet_sure.minute }}:{{ ucretsiz_hizmetlerim.ilgili_hizmet_sure.second }} </h4>
+                                        {% if user.is_authenticated %}
+                                          <input type="submit" class="btn btn-info  text-bold  hov-effect" prop="talepet" value="Talep Et"/>
+                                            <b prop="{{ ucretsiz_hizmetlerim.id }}" id="talep_edilen_hizmet"></b>
+                                            <span prop="{{ user }}" id="_kadi" style="opacity: 0;"></span>
+                                        {% endif %}
+                                      </li>
+                                  </ul>
+                              </nav>
+                          </div>
+                        </div>
+                      </div>
+             </form>
+
+               {% endfor %}
+                                    <script type="text/javascript">
+                                        $('.time-and-date').each(function() {
+                                           var $this = $(this), finalDate = $(this).text();
+                                           $this.countdown(finalDate, function(event) {
+                                               $this.text(event.strftime('%D g %H sa %M dk %S s'));
+                                           });
+                                        });
+
+                                        $(function () {
+                                            var secici = $(".time-and-date:contains('00 g 00 sa 00 dk 00 s')");
+                                            $(secici).html("Bu fırsatın süresi doldu.");
+                                            $(".time-and-date:contains('Bu fırsatın süresi doldu.')").addClass('sure_bitti');
+                                            $(".sure_bitti+input").attr('disabled', 'disabled');
+                                        })
+                                    </script>
+              <script>
+                     $(function () {
+
+                          $("input[prop=talepet]").click(function () {
+
+                                var aktif = {{ user.id }};
+                                var talep_edilen_hizmet = $(this).next('b').attr('prop');
+
+                                $.post("{% url 'ucretsiz_talepler' %}", {'aktif_kadi' : aktif , 'ucretsiz_hizmet' : talep_edilen_hizmet},
+                                       function(cevap)
+                                       {
+                                    alert(cevap);
+                           }, "json");
+
+                        })
+                     })
+                     </script>
+
+
+
+             </div>
+
+         {% endblock %}
+
+
+{% block mekanlar %}
+
+
+         <div class="living_middle col-md-16" id="mekanlar">
+              <div class="container ">
+                    <h1 class="text-center text-shadow font-special">
+                        <img
+                        src="{% static 'images/mekanlar.png' %}" class="margin-05" width="36" height="36" >
+                        MEKANLAR</h1>
+
+
+{% for mekan_bilgi in mekanlar %}
+
+                    <div class="col-md-3 wow  margin-top-05 sirala fadeInDown" data-wow-delay="0.4s">
+                    <div class="living_box"><a href="{% url 'Mekan_Detaylar'  mekanad=mekan_bilgi.slug gelen_id=mekan_bilgi.id %}">
+
+                        <img src="{% static "" %}{{ mekan_bilgi.mekan_foto }} " class="img-responsive" alt="{{ mekan_bilgi }}" /> </a>
+                        <span class="sale-box" data-toggle="tooltip" data-placement="top" title="Filtrele">
+                          <span class="sale-label none-select">{{ mekan_bilgi.hizmet_tip_id }}</span>
+
+                        </span>
+
+
+                        <div class="living_desc">
+                        <h3><a href="#">{{ mekan_bilgi.mekan_adi }}</a></h3>
+                        <p class="text-justify">{{ mekan_bilgi.mekan_tanitim|truncatewords:'5' }} </p>
+                        <a href="{{ mekan_bilgi.mekan_web_site }}" style="text-decoration:none;"  target="_blank" class="btn3"><img src="{% static 'images/link.png'  %}" alt="" data-toggle="tooltip" data-placement="bottom" title="Siteye git"></a>
+                        <p class="price">
+                            {% if not mekan_bilgi.mekan_fiyat == None %}
+                            {{ mekan_bilgi.mekan_fiyat }}
+                                {% else %}
+                                <i class="icon-trophy invisible"></i>
+                            {% endif %}
+                        </p>
+                        </div>
+                        <table border="1" class="propertyDetails">
+                        <tbody><tr>
+                           <td><img src="{% static 'images/area.png' %}" alt="" style="margin-right:4px;"> <strong>{{ mekan_bilgi.mekan_ozellik1|capfirst }} </strong> </td>
+                           <td><img src="{% static 'images/bed.png' %}" alt="" style="margin-right:7px;"> <strong>  {{ mekan_bilgi.mekan_ozellik2|capfirst }} </strong></td>
+                           <td><img src="{% static  'images/drop.png' %}" alt="" style="margin-right:7px;">  <strong> {{ mekan_bilgi.mekan_ozellik3|capfirst }} </strong></td>
+                            </tr>
+                        <a type="button" class="btn btn-danger tikla" style="color:white; font-weight: bold; margin-left:5px;" data-toggle="tooltip" data-placement="bottom" title="Beğeni Ortalaması">
+                            {{ mekan_bilgi.yildizim|truncatechars:6|cut:"..." }}
+                        </a>
+                        <span class="star-rating" style="margin-left: 5px;" data-toggle="tooltip" data-placement="bottom" title="Mekanı oyla">
+                              <input type="radio" name="rating1" value="1" prop="{{ mekan_bilgi.id }}" /><i></i>
+                              <input type="radio" name="rating2" value="2" prop="{{ mekan_bilgi.id }}" /><i></i>
+                              <input type="radio" name="rating3" value="3" prop="{{ mekan_bilgi.id }}" /><i></i>
+                              <input type="radio" name="rating4" value="4" prop="{{ mekan_bilgi.id }}" /><i></i>
+                              <input type="radio" name="rating5" value="5" prop="{{ mekan_bilgi.id }}" /><i></i>
+                        </span>
+
+                        </tbody></table>
+
+
+                    </div>
+                </div>
+
+{% endfor %}
+
+              </div>
+        </div>
+
+
+
+
+    {% endblock %}
+
+
+
+    {% block detaylar %}
+
+    {% endblock %}
+
+
+
+     {% block sectiklerimiz %}
+
+      <div class="living_bottom" id="secilenler" >
+      <div class="container">
+        <h1 class="text-center text-shadow font-special"><img
+                        src="{% static 'images/sectiklerimiz.png' %}" class="margin-05" width="36" height="36" >SEÇTİKLERİMİZ</h1>
+
+            {% for secilenler in secilenler_listesi %}
+
+             <div class="top_grid wow fadeInLeftBig" data-wow-delay="0.3s">
+              <div class="col-md-3">
+          <div class="grid1">
+          <div class="view view-first">
+                  <div class="index_img"> <img src="{% static "" %}{{ secilenler.mekan_adi.mekan_foto }}" class="img-responsive" alt=""/></div>
+
+                  {% if not secilenler.mekan_adi.mekan_fiyat == None %}
+                       <div class="sale">
+                  {{ secilenler.mekan_adi.mekan_fiyat }} 
+                      </div>
+                  {% endif %}
+
+                  <div class="mask">
+                        <div class="info"><a href="{{ secilenler.mekan_adi.mekan_web_site }}" target="_blank"><i class="search"> </i> </a></div>
+
+                       </div>
+                   </div>
+
+          <div class="clearfix"></div>
+           <div class="inner_wrap">
+            <h3 class="text-justify"> <strong>{{  secilenler.mekan_degerlendirme }} </strong></h3>
+
+
+           <h3 class="text-danger">  <img src="{% static 'images/detaylar/mekan_adi.png' %}" alt="mekan_adi" style="margin-right: 5px;">   <strong> {{ secilenler.mekan_adi|upper }} </strong> </h3>
+           <h3 class="text-muted">  <img src="{% static 'images/detaylar/alan.png' %}" alt="mekan_yeri" style="margin-right: 5px;">   <strong> {{ secilenler.mekan_adi.hizmet_id.hizmet_adi|upper }} </strong> </h3>
+           <h3 class="text-info">  <img src="{% static 'images/detaylar/yer.png' %}" alt="mekan_yeri" style="margin-right: 5px;">   <strong> {{ secilenler.mekan_adi.il_id.il_adi|upper }} </strong> </h3>
+
+            <ul class="star1">
+
+
+              <li>
+              <a href="#" style="text-decoration : none;">
+                  {% if secilenler.mekan_yildiz == '4' %}
+                        <img src="{% static "" %}images/star1.png" alt="">
+                  {% elif secilenler.mekan_yildiz == '5' %}
+                        <img src="{% static "" %}images/star2.png" alt="">
+                  {% endif %}
+              </a>
+              <a class="btn btn-info" data-toggle="tooltip" data-placement="right" title="Gözat..." href="{% url 'Mekan_Detaylar' mekanad=secilenler.mekan_adi.slug gelen_id=secilenler.mekan_adi.id %}"> >> </a>
+               </li>
+            </ul>
+           </div>
+           </div>
+        </div>
+
+      </div>
+          {% endfor %}
+      </div>
+   </div>
+
+
+{% endblock %}
+
+     {% block yeniler %}
+
+    <div class="living_middle" id="yeniler">
+   	  <div class="container">
+
+   	  	<h1 class="text-center text-shadow font-special">
+            <img src="{% static 'images/yeniler.png' %}" class="margin-05" width="36" height="36" >
+
+            YENİ KATILANLAR</h1>
+            {% for yeniler in yeni_katilanlar %}
+
+   	  	<div class="col-md-3 post_left wow fadeInLeft" data-wow-delay="0.7s">
+   	  		<div class="mask1"><img src="{% static '' %}{{ yeniler.mekan_foto }}" alt="image" class="img-responsive zoom-img" /></div>
+   	  	    <p class="text-justify">{{ yeniler.mekan_tanitim|truncatewords:5 }}</p>
+            <a href="{% url 'Mekan_Detaylar' mekanad=yeniler.slug gelen_id=yeniler.id  %}" class="btn btn-default pull-right" data-toggle="tooltip" data-placement="bottom" title="Gözat..."> >> </a>
+   	  	    <div class="divider"></div>
+   	  	    <p class="field-content text-info" data-toggle="tooltip" data-placement="left" title="MEKAN ADI"> <img src="{% static 'images/detaylar/mekan_adi.png' %}" alt="mekan_adi" style="margin-right: 5px;">   {{ yeniler.mekan_adi }}</p>
+   	  	    <p class="field-content text-warning" data-toggle="tooltip" data-placement="left" title="MEKAN ILI">  <img src="{% static 'images/detaylar/yer.png' %}" alt="mekan_yeri" style="margin-right: 5px;">  {{ yeniler.il_id.il_adi }}</p>
+   	  	</div>
+            {% endfor %}
+   	  </div>
+   </div>
+
+
+        {% endblock %}
+
+     {%  block mekan_kaydet %}
+
+     {% endblock %}
+
+
+
+     <!-- FOOTER  -->
+
+    <div class="footer">
+   	<div class="container">
+   	 <div class="footer_top">
+   	   <h3 class="text-shadow-white">Yeniliklerden haberdar ol</h3>
+         <form action="javascript:void(0);" >
+		<span>
+			<i><img src="{% static 'images/mail.png' %} " alt=""></i>
+
+                        <input type="email" id="ozel" value="E-Posta Adresi" name="abone_eposta_adresi"required/>
+                        <label class="btn1 btn2 btn-2 btn-2g"> <input name="submit" type="submit" id="abone" value="Abone Ol"> </label>
+
+                     <script>
+                         $(function () {
+
+                             $("#abone").attr('disabled', 'disabled');
+
+                             $("input[name=abone_eposta_adresi]").keyup(function () {
+                                 var girilen  = $("input[name=abone_eposta_adresi]").val();
+                                 if (girilen.length > 4) {
+                                     $("#abone").removeAttr('disabled');
+                                 }else {
+                                     $("#abone").attr('disabled', 'disabled');
+                                 }
+                             })
+
+                           $("#abone").click(function () {
+
+                               var eposta = $("input[name=abone_eposta_adresi]").val();
+
+                                  $.post("{% url 'abone' %}", {'abone_eposta' : eposta},
+                                           function(cevap)
+                                           {
+                                                    $("#modal_tikla").trigger('click');
+                                                    $(".control-label").html(cevap);
+
+                                           }, "json");
+
+                           })
+                         })
+                     </script>
+
+		    <div class="clearfix"> </div>
+
+		</span>
+</form>
+         <span data-toggle="modal" data-target="#exampleModal2" id="modal_tikla" style="opacity: 0;"></span>
+	  </div>
+	  <div class="footer_grids">
+	     <div class="footer-grid">
+			<h4>ILETISIM</h4>
+			<ul class="list1">
+               <li> <a href="mailto:threefeatures@yahoo.com" > <i ><img src="{% static 'images/mail.png' %} " alt="eposta gönder"></i>İletişim</a></li>
+				<!-- <li><a href="#">Hakkında</a></li>
+				<li><a href="#">Gizlilik Sözleşmesi</a></li> -->
+			</ul>
+		  </div>
+		  <div class="footer-grid">
+			<h4>Biz Kimiz?</h4>
+			<ul class="list1">
+				<li><a href="http://slides.com/gndz/threefeatures#/" target="_blank">Kısa bir gözat</a></li>
+			</ul>
+		  </div>
+		  <div class="footer-grid last_grid">
+			<h4>Takip Et</h4>
+			<ul class="footer_social wow fadeInLeft" data-wow-delay="0.4s">
+			  <li><a href="#"> <i class="fb"> </i> </a></li>
+			  <li><a href="#"><i class="tw"> </i> </a></li>
+			  <li><a href="#"><i class="google"> </i> </a></li>
+			  <li><a href="#"><i class="u_tube"> </i> </a></li>
+		 	</ul>
+		  </div>
+          <p class="text-shadow-white" style="color: white;">&copy;Tüm Hakları Saklıdır.</p>
+		  <div class="clearfix"> </div>
+	   </div>
+      </div>
+   </div>
+
+<!-- MODALLAR  -->
+     <form action="" method="POST">
+         {% csrf_token %}
+            <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-body">
+
+                      <div class="form-group">
+                          <label for="message-text" class="control-label text-info grp-font-size-l"></label>
+
+                      </div>
+
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+    </form>
+
+     <!-- ÜYELİK SÖZLEŞMESİ -->
+
+     <div class="modal fade bs-example-modal-lg" id="SozlesmeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Üyelik Sözleşmesi</h4>
+      </div>
+      <div class="modal-body">
+          <ul class="text-justify bold-small">
+              <li>İşbu sözleşmenin tarafları threefeatures.com ile sisteme üye olacak kişidir.</li>
+              <li class="text-warning"> threefeatures.com üyesi olmak istiyorsanız, Kayıt Formu'nu doğru bilgiler ile doldurmanız ve threefeatures.com Üyelik Sözleşmesi hükümlerine uymayı kabul ve taahhüt etmeniz gereklidir. Kararınıza göre Kayıt Formu'nun altında bulunan (Üye Ol) veya (Vazgeç) butonunu tıklayınız. Üye Ol butonunu tıkladığınızda işbu Sözleşmede'ki bütün kayıt ve şartlar ile bağlı olacağınızdan sözleşmeyi dikkatlice okumanız önemlidir. </li>
+              <li>threefeatures.com ; sözleşmeyi onaylayan üyelerine internet sitesi üzerinde değişik servisler (elektronik posta, haber, oyun, video, müzik, şehir rehberi, vb.) adı altında hizmetler sunar.
+                İşbu sözleşmenin konusu, internet sitesi üzerinde sunulan hizmetlerin, uygulamaların ve içeriklerin kullanılması koşullarının belirlenmesidir. </li>
+              <li>threefeatures.com üyesi, üyelik bilgilerinin ve  vermiş olduğu hizmet içeriklerinin doğruluğundan dolayı kendisi sorumludur. Bu hususta threefeatures.com'un sorumluluğuna gidilimez. Sistemi kullanan üyeler işletmelerin dürüst satıcılar olduğunu kendileri denetlemeleri gerekmektedir. </li>
+              <li>threefeatures.com, sisteme girilen işletme, mekan, firma ve şahısların bilgilerinin doğruluğunu garanti etmez. Bu hususta doğabilecek zararlardan threefeatures.com hiçbir şekilde sorumlu değildir.</li>
+              <li>Kullanıcıların veya üyelerin yasal olmayan bir şekilde içerik paylaşması, aldatıcı, hileli ve dolandırıcılık niteliği taşıyan işlemlerinden ötürü bilgileri istenildiği takdirde ilgili kurumlarla paylaşılacak ve üyelikleri kapatılacaktır.</li>
+              <li>threefeatures, üyelerine daha iyi hizmet verebilmek amacıyla üyelik aşamasında ve internet sitesini kullanırken kullanıcılardan bazı kişisel bilgilerin (isim, yaş, ilgi alanlarınız, e-posta adresiniz vb.) verilmesini talep etmektedir. threefeatures sistemlerinde toplanan bu bilgiler, sizlere daha iyi hizmet vermek ve threefeatures ürün ve servisleri ile ilgili kampanya, bülten, tanıtım, reklam ve duyurulardan haberdar olmanız amacıyla ticari elektronik iletilerin gönderilmesi ve istenmeyen e-postaların iletilmemesine yönelik üye belirleme çalışmalarında threefeatures bünyesinde kullanılmaktadır. threefeatures ile paylaşmış olduğunuz kişisel bilgileriniz bu amaç dışında kullanılmaz ve 3. Şahıslar ile paylaşılmaz.</li>
+              <li>Sisteme kayıt olan üyeye ait mekan veya firma bilgileri sahibi olduğu işletmenin öne çıkması açısından bu işletmeyle ilgili vermiş olduğu bilgiler diğer kullanıcılar tarafından görülebilir. threefeatures.com'a mekan kaydı yaparak bunu kabul etmiş sayılırsınız.</li>
+              <li>threefeatures.com sağladığı hizmet ile işletmelerin öne çıkmasını amaçlamaktadır. </li>
+              <li>Bu sözleşmeden doğan ihtilaflarda öncelikle bu sözleşmedeki hükümler, hüküm bulunmayan hallerde ise Türk Kanunları uygulanacaktır. Kullanıcı Kayıt Formu'nu doldurup formun altında bulunan "Kabul Ediyorum" butonunu tıkladığında bu sözleşme taraflar arasında süresiz olarak yürürlüğe girer ve taraflar dilediği zaman bu sözleşmeyi sona erdirebilir.</li>
+          </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel"><strong>Kullanıcı Bilgileri</strong></h4>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'Kullanici_Bilgileri_Guncelle' %}" method="POST">
+            {% csrf_token %}
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">Kullanıcı Adı:</label>
+            <input type="text" class="form-control" required name="username" id="us">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">E-Posta Adresi:</label>
+            <input type="email" class="form-control" required name="email">
+          </div>
+            <div class="modal-footer">
+        <button type="button" id="parola_degistir" class="btn btn-warning">Parola Değiştir</button>
+        <button type="submit" class="btn btn-success" id="kadi_guncelle">Güncelle</button>
+      </div>
+        </form>
+          <p class="success" id="kadi_kontrol"></p>
+      </div>
+
+        <div class="modal-header" id="p_header" style="display: none;">
+        <h4 class="modal-title" id="exampleModalLabel"><strong>Parola Değiştir</strong></h4>
+      </div>
+      <div class="modal-body" id="p_body" style="display: none;">
+        <form action="{% url 'Parola_Degistir' %}" method="POST">
+            {% csrf_token %}
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">Eski Parola:</label>
+            <input type="password" class="form-control" name="password" id="eski_parola" required>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">Yeni Parola:</label>
+            <input type="password" class="form-control" name="password1" id="id_password1" required minlength="6">
+          </div>
+            <div class="form-group">
+            <label for="message-text" class="control-label">Yeni Parola(Tekrar):</label>
+            <input type="password" class="form-control" name="password2" id="id_password2" required minlength="6">
+          </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+            <button type="submit" class="btn btn-success" id="guncelle" disabled>Güncelle</button>
+             </div>
+        </form>
+          <p id="uyari"></p>
+      </div>
+        <input type="text" value="{{ user.id }}" id="us_id" style="opacity: 0;;">
+        <script>
+
+            // RATING
+
+                $("input[name^=rating] ").click(function () {
+                    var yildiz = $(this).val();
+                    var mekan_id = $(this).attr('prop');
+
+                    $.post("{% url 'yildizla' %}", {'yildiz' : yildiz, 'mekan': mekan_id},
+                           function(cevap)
+                           {
+
+
+                           }, "json");
+
+                })
+
+
+                // KULLANICI ADI VE EPOSTA GÜNCELLEME
+
+                 $("#us").keyup(function () {
+                    var kadi = $("#us").val();
+                    var eski = $("#eski_parola").val();
+
+                    if(kadi.length >= 4) {
+                    $.post("{% url 'Kayitli_Kullanici_Sorgula' %}", {"veri":kadi, "eski_parola": eski },
+                               function(cevap)
+                               {
+                                    if(cevap == 1) {
+                                        $("#kadi_kontrol").html("<strong>Kayıtlı kullanıcı adı girdiniz.</strong>").css('color', 'crimson');
+                                        $("#kadi_guncelle").attr('disabled', 'disabled');
+                                    } else {
+                                        $("#kadi_kontrol").html("<strong>Geçerli kullanıcı adı girdiniz.</strong>").css('color', 'green');
+                                        $("#kadi_guncelle").removeAttr('disabled');
+                                    }
+
+                               }, "json");
+                    } else{
+                        $("#kadi_kontrol").html("<strong>Kullanıcı adı en az 4 karakter içermelidir.</strong>").css('color', 'crimson');
+                        $("#kadi_guncelle").attr('disabled', 'disabled');
+                    }
+                })
+
+                // ESKİ PAROLA KONTROLÜ
+
+                $("#eski_parola").keyup(function () {
+                    var parola = $("#eski_parola").val();
+                    var parola1 = $("#id_password1").val();
+                    var parola2 = $("#id_password2").val();
+                    var us_id = $("#us_id").val();
+
+                    if(parola.length >= 1) {
+                    $.post("{% url 'Eski_Parola_Kontrol' %}", {'veri' : us_id, 'eski_parola' : parola},
+                           function(cevap)
+                           {
+                                if(cevap=="Eski parola doğru girildi.") {
+                                    $("#uyari").html("<strong>"+ cevap + "</strong>").css('color', 'green').fadeOut(3000);
+                                    if(parola1 != '' && parola2 != '') {
+                                        if(parola1 == parola2) {
+                                        $("#guncelle").removeAttr('disabled');
+                                            }
+                                    }else{
+                                    $("#guncelle").attr('disabled', 'disabled'); }
+                                }else{
+                                    $("#guncelle").attr('disabled', 'disabled');
+                                }
+
+                           }, "json");
+                    } else{
+                        $("#uyari").html("<strong>Eski parolanızı girmediniz.</strong>").css('color', 'crimson');
+                        $("#guncelle").attr('disabled', 'disabled');
+                    }
+                })
+
+                // YENİ PAROLA KONTROLÜ
+
+            $(function () {
+                $("#parola_degistir").click(function () {
+                    $("#p_body, #p_header").toggle(300);
+                })
+
+                $("#id_password2, #id_password1").keyup(function () {
+                    var parola1 = $("#id_password1").val();
+                    var parola2 = $("#id_password2").val();
+                    var eski_parola = $("#eski_parola").val();
+
+                    if (parola2 != parola1 || parola1 != parola2) {
+                        $("#uyari").html('<strong>Parola Eşlemedi.</strong>').css('color', 'crimson');
+                        $("#guncelle").attr('disabled', 'disabled');
+                    } else {
+                        $("#uyari").html('<strong>Parola Eşleşti.</strong>').css('color', 'green');
+                        $("#guncelle").removeAttr('disabled');
+                    }
+
+                    if( parola2 == '' || parola1=='' || eski_parola ==''){
+                        $("#guncelle").attr('disabled', 'disabled');
+                    }
+                })
+
+
+
+            })
+
+
+        </script>
+
+       <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-68629223-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

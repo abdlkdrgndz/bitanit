@@ -1,0 +1,140 @@
+{% extends "iskelet.html" %}
+
+{% block analiz %}
+
+{% endblock %}
+
+{% block register %}
+    <div class="container " id="parlak">
+    <div class="row col-md-10">
+     <form action="{% url 'Kayit_Kontrol' %}" method="POST">
+         {% csrf_token %}
+      <div class="modal-body well  well-lg margin-top-10">
+
+          <div class="form-group " id="reg_form">
+
+                    <div class="modal-header">
+
+
+                  </div>
+                  <div class="modal-body">
+                      <div class="form-group">
+                        <label for="recipient-name" class="control-label">Kullanıcı Adı:</label>
+                        <input type="text" class="form-control" name="kadi" required placeholder="Örn: ali742">
+                      </div>
+                        <div class="form-group">
+                        <label for="recipient-name" class="control-label">E-Posta:</label>
+                        <input type="email" class="form-control" name="eposta" required placeholder="Orn: ali@gmail.com">
+                      </div>
+                      <div class="form-group">
+                        <label for="message-text" class="control-label">Parola:</label>
+                         <input type="password" class="form-control" name="sifre" required  placeholder="Şifreniz 6 karakterden az olmamalıdır.">
+                      </div>
+                      <div class="form-group">
+                        <label for="message-text" class="control-label">Güvenlik Kodu:</label>
+                         <input type="text"   class="form-control" name="gv_kod" required  placeholder="5 haneli güvenlik kodunu giriniz.">
+                          <script type="text/javascript">
+                        document.write(unescape('%3C%70%20%69%64%3D%22%63%61%70%74%63%68%61%22%20%63%6C%61%73%73%3D%22%70%75%6C%6C%2D%72%69%67%68%74%20%74%65%78%74%2D%77%61%72%6E%69%6E%67%20%62%6F%6C%64%20%6D%61%72%67%69%6E%2D%74%6F%70%2D%30%35%22%20%73%74%79%6C%65%3D%22%66%6F%6E%74%2D%66%61%6D%69%6C%79%3A%20%47%72%61%66%20%21%69%6D%70%6F%72%74%61%6E%74%3B%20%66%6F%6E%74%2D%73%69%7A%65%3A%20%32%36%70%78%3B%20%63%75%72%73%6F%72%3A%20%70%6F%69%6E%74%65%72%3B%20%66%6F%6E%74%2D%77%65%69%67%68%74%3A%20%62%6F%6C%64%3B%22%20%64%61%74%61%2D%74%6F%67%67%6C%65%3D%22%74%6F%6F%6C%74%69%70%22%20%64%61%74%61%2D%70%6C%61%63%65%6D%65%6E%74%3D%22%62%6F%74%74%6F%6D%22%20%74%69%74%6C%65%3D%22%59%65%6E%69%6C%65%22%20%72%65%61%64%6F%6E%6C%79%3E%3C%2F%70%3E'));
+                          </script>
+                              </div>
+                      <div class="form-group text-center">
+
+                         <input type="checkbox" class="form-control hide-bg" name="sozlesme" required  > <p class="text-bold">  <span data-toggle="modal" data-target="#SozlesmeModal" class="text-success none-select">Üyelik Sözleşmesini</span> kabul ediyorum.</p>
+                      </div>
+                          <script>
+                              $(function () {
+                                  $("#gonder").attr('disabled' ,'disabled');
+
+                                  $.post('{% url 'gvk' %}', {'g' : ''},
+                                          function(cevap) {
+
+                                                $("#captcha").html(cevap);
+                                  }, 'json')
+
+                                  $("#captcha").click(function () {
+                                      $("#captcha").hide();
+                                      $.post('{% url 'gvk' %}', {'g' : ''},
+                                          function(cevap) {
+                                              $("#captcha").fadeIn(250);
+                                              $("#captcha").html(cevap);
+                                        }, 'json')
+
+                                  })
+
+                                  $("input[name=gv_kod]").keyup(function () {
+
+                                      var cp = $("#captcha").html();
+                                      var girilen = $("input[name=gv_kod]").val();
+
+                                      if(girilen == cp) {
+                                          $("#gonder").removeAttr('disabled');
+                                      }else {
+                                          $("#gonder").attr('disabled' ,'disabled');
+                                      }
+                                  })
+
+                                  setInterval(function(){
+
+                                        var cp = $("#captcha").html();
+                                        var girilen = $("input[name=gv_kod]").val();
+
+                                      if(girilen == cp) {
+                                          $("#gonder").removeAttr('disabled');
+                                      }else {
+                                          $("#gonder").attr('disabled' ,'disabled');
+                                      }
+
+
+			                     }, 10);
+
+                              })
+                          </script>
+                      </div>
+                </div>
+
+          </div>
+      <div class="modal-footer">
+         <button type="submit" class="btn btn-success pull-left" id="gonder">Kayıt Ol</button>
+      </div>
+
+
+         {% if hata %}
+
+            <div class="alert alert-danger" role="alert">{{  hata }}</div>
+
+             {% elif hata2 %}
+
+           <div class="alert alert-info" role="alert">{{ hata2 }}</div>
+
+             {% elif basarili %}
+
+            <div class="alert alert-success" role="alert">{{ basarili }}</div>
+
+             {% elif hata3 %}
+
+             <div class="alert alert-warning" role="alert">{{ hata3 }}</div>
+
+          {% endif %}
+         </form>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+
+
+{% block mekanlar %}
+
+{% endblock %}
+
+{% block sectiklerimiz %}
+
+{% endblock %}
+
+{% block yeniler %}
+
+{% endblock %}
+
+

@@ -1,0 +1,39 @@
+
+{% block analiz %}
+<div class="container">
+    <div class="row">
+        <div class="well well-lg">
+           {{ sonuclar.yazar }}
+        </div>
+    </div>
+</div>
+
+    <form action=""  method="post">
+            {% csrf_token %}
+                {{ out.as_table }}
+                <input type="submit" value="Go">
+    </form>
+
+     <h1>Min: </h1>{{ min }}
+     <h1>Ortalama : </h1>{{ avg }}
+     <h1>Max : </h1>{{ max }}
+    <h2>Aciklama : </h2> {{ cont }}
+    <h2>ilk : </h2> {{ ilk }}
+    <h2>deger : </h2>
+    {% for i in degerler %}
+    {{ i.mekan_fiyat }} <br>
+    {% endfor %}
+
+
+    <h1>farkli sorgulama</h1>
+  <h2>  {% if pat|length > 100 %}
+  aliveli
+  {% else %}
+  velideli
+  {% endif %}
+  </h2>
+
+
+{% endblock %}
+
+

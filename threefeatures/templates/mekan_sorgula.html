@@ -1,0 +1,72 @@
+{% extends "iskelet.html" %}
+{% load static from staticfiles %}
+
+{% block analiz %}
+
+{% endblock %}
+
+{% block mekanlar %}
+
+       <div class="living_middle">
+              <div class="container">
+                    <h2 class="title block-title">MEKANLAR</h2>
+
+                {% if not mekan_sonuclari %}
+
+                        <div class="alert alert-danger" role="alert">
+
+                              <i class="icon-tick"></i>
+                             UZGUNUZ, MEKAN KAYDI BULUNAMADI
+                        </div>
+
+                 {%  endif %}
+
+{% for mekan_bilgi in mekan_sonuclari %}
+
+                    <div class="col-md-4 wow fadeInLeft margin-top-05 sirala" data-wow-delay="0.4s">
+                    <div class="living_box"><a href="{% url 'Mekan_Detaylar' mekanad=mekan_bilgi.slug gelen_id=mekan_bilgi.id %}">
+
+                        <img src="{% static "" %}{{ mekan_bilgi.mekan_foto }} " class="img-responsive" alt="{{ mekan_bilgi.slug }}"/> </a>
+                        <span class="sale-box">
+                          <span class="sale-label none-select">{{ mekan_bilgi.hizmet_tip_id }}</span>
+                        </span>
+
+                        <div class="living_desc">
+                        <h3><a href="#">{{ mekan_bilgi.mekan_adi }}</a></h3>
+                        <p>{{ mekan_bilgi.mekan_tanitim|truncatewords:'5' }} </p>
+                        <a href="" style="text-decoration:none;"  target="_blank" class="btn3"><img src="{% static 'images/link.png'  %}" alt=""></a>
+                        <p class="price">
+                            {% if not mekan_bilgi.mekan_fiyat == None %}
+                            {{ mekan_bilgi.mekan_fiyat }} TL
+                                {% else %}
+                                <i class="icon-trophy invisible"></i>
+                            {% endif %}
+
+                        </p>
+                        </div>
+                        <table border="1" class="propertyDetails">
+                        <tbody><tr>
+                           <td><img src="{% static 'images/area.png' %}" alt="" style="margin-right:7px;">{{ mekan_bilgi.mekan_ozellik1 }}</td>
+                           <td><img src="{% static 'images/bed.png' %}" alt="" style="margin-right:7px;">{{ mekan_bilgi.mekan_ozellik2 }}</td>
+                           <td><img src="{% static  'images/drop.png' %}" alt="" style="margin-right:7px;">{{ mekan_bilgi.mekan_ozellik3 }}</td>
+                            </tr>
+
+                        <span class="star-rating" style="margin-left: 5px;" data-toggle="tooltip" data-placement="bottom" title="MEKANI OYLA">
+                              <input type="radio" name="rating1" value="1" prop="{{ mekan_bilgi.id }}" /><i></i>
+                              <input type="radio" name="rating2" value="2" prop="{{ mekan_bilgi.id }}" /><i></i>
+                              <input type="radio" name="rating3" value="3" prop="{{ mekan_bilgi.id }}" /><i></i>
+                              <input type="radio" name="rating4" value="4" prop="{{ mekan_bilgi.id }}" /><i></i>
+                              <input type="radio" name="rating5" value="5" prop="{{ mekan_bilgi.id }}" /><i></i>
+                        </span>
+                        </tbody></table>
+                    </div>
+                </div>
+
+{% endfor %}
+
+              </div>
+        </div>
+
+
+{% endblock %}
+

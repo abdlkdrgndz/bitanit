@@ -1,0 +1,158 @@
+{% extends "iskelet.html" %}
+{% load static from staticfiles %}
+
+{% block ucretsizler %}
+
+{% endblock %}
+
+{% block analiz %}
+
+{% endblock %}
+
+{% block mekanlar %}
+
+{% endblock %}
+{% block detaylar %}
+
+    {% for detaylar in mekan_detay %}
+
+   <div class="living_middle">
+   	  <div class="container">
+          <div class="well well-lg ">
+   	    <div class="entertain_box wow fadeInLeft margin-top-20 " data-wow-delay="0.4s">
+
+                <div class="col-md-3 grid_box">
+                   <a  class="swipebox"  title="Mekan Fotograf" data-toggle="modal" data-target="#exampleModal"> <img src="{% static "" %}{{ detaylar.mekan_foto }}" class="img-responsive img-thumbnail" alt=""><span class="zoom-icon"></span> </a>
+
+            </div>
+		   <div class="clearfix"> </div>
+		 </div>
+              </div>
+         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabel">Mekan Foto Album</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form>
+                      <div class="form-group">
+                        <img src="{% static "" %}{{ detaylar.mekan_foto }}" alt="{{ detaylar.mekan_foto }}" class="img-thumbnail">
+                      </div>
+
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                  </div>
+                </div>
+              </div>
+        </div>
+     </div>
+            <div class="container  well well-lg">
+
+             <div class="row ">
+                  <div class="col-sm-8 col-md-6 wow fadeInDown" data-wow-delay="0.1s">
+                    <div class="thumbnail">
+                      <img src="{% static 'images/info.png' %}" alt="mekan bilgileri">
+                      <div class="caption">
+                        <h3 class="text-center text-info border-bottom-green">MEKAN BILGILERI</h3>
+                          <div class="form-group">
+                                <img src="{% static 'images/detaylar/mekan_adi.png' %}" alt="mekan_adi" style="float: left; margin-right: 5px;">
+                                <p name="mekan_adi" data-toggle="tooltip" data-placement="left" title="MEKAN ADI" style="cursor: pointer;" style="float: left; "><strong> {{ detaylar.mekan_adi }} </strong></p>
+                          </div>
+                          <div class="form-group">
+                              <img src="{% static 'images/detaylar/alan.png' %}" alt="mekan_adi" style="float: left; margin-right: 5px;">
+                              <p name="mekan_hizmet_adi" data-toggle="tooltip" data-placement="left" title="MEKAN HIZMET ALANI" style="cursor: pointer;" style="float: left; "><strong> {{ detaylar.hizmet_id.hizmet_adi }} </strong></p>
+                          </div>
+                          <div class="form-group">
+                              <img src="{% static 'images/detaylar/tip.png' %}" alt="mekan_adi" style="float: left; margin-right: 5px;">
+                              <p name="mekan_hizmet_tur" data-toggle="tooltip" data-placement="left" title="MEKAN HIZMET TURU" style="cursor: pointer;" style="float: left; "><strong> {{ detaylar.hizmet_tip_id.hizmet_tipi }} </strong></p>
+                          </div>
+                          <div class="form-group">
+                              <img src="{% static 'images/detaylar/yer.png' %}" alt="mekan_adi" style="float: left; margin-right: 5px;">
+                              <p name="mekan_hizmet_tur" data-toggle="tooltip" data-placement="left" title="MEKAN ILI" style="cursor: pointer;" style="float: left; "><strong> {{ detaylar.il_id.il_adi }} </strong></p>
+                          </div>
+                        <p></p>
+                      </div>
+                    </div>
+                  </div>
+
+                 <div class="col-sm-8 col-md-6  wow fadeInDown" data-wow-delay="0.3s">
+                    <div class="thumbnail">
+                      <img src="{% static 'images/price.png' %}" alt="mekan bilgileri">
+                      <div class="caption">
+                        <h3 class="text-center text-info border-bottom-yellow">ONE CIKAN OZELLIKLER VE MINUMUM BEDEL</h3>
+                          <div class="form-group">
+                              <img src="{% static 'images/detaylar/ozellik.png' %}" alt="mekan_adi" style="float: left; margin-right: 5px;">
+                              <p name="ozellikler" data-toggle="tooltip" data-placement="left" title="ONE CIKAN OZELLIKLER" style="cursor: pointer;" style="float: left; "><strong> {{ detaylar.mekan_ozellik1 }} , {{ detaylar.mekan_ozellik2 }} , {{ detaylar.mekan_ozellik3 }} </strong></p>
+                          </div>
+                          <div class="form-group">
+                              <img src="{% static 'images/detaylar/fiyat.png' %}" alt="mekan_adi" style="float: left; margin-right: 5px;">
+                              <p name="bedel" data-toggle="tooltip" data-placement="left" title="MINUMUM HIZMET BEDELI" style="cursor: pointer;" style="float: left; ">
+                                     <strong>
+                                  {% if not detaylar.mekan_fiyat == None %}
+                                  {{ detaylar.mekan_fiyat }} TL
+                                      {% else %}
+                                      Minimum Hizmet Bedeli Belirlenmemis
+                                  {% endif %}
+
+                                    </strong></p>
+                          </div>
+                          <div class="form-group">
+                              <img src="{% static 'images/detaylar/yildiz.png' %}" alt="mekan_adi" style="float: left; margin-right: 5px;">
+                              <p name="bedel" data-toggle="tooltip" data-placement="left" title="BEGENI ORTALAMASI" style="cursor: pointer;" style="float: left; "><strong> {{ detaylar.yildizim|truncatechars:6|cut:"..." }}/5.0 </strong></p>
+                          </div>
+
+                      </div>
+                    </div>
+                  </div>
+                 <div class="clearfix"></div>
+
+                 <div class="col-sm-8 col-md-6  wow fadeInDown" data-wow-delay="0.5s">
+                    <div class="thumbnail">
+                      <img src="{% static 'images/intro.png' %}" alt="mekan bilgileri">
+                      <div class="caption">
+                        <h3 class="text-center text-info border-bottom-purple">MEKAN TANITIM</h3>
+                          <div class="form-group">
+                              <img src="{% static 'images/detaylar/tanitim.png' %}" alt="mekan_adi" style="float: left; margin-right: 5px;">
+                              <p name="mekan_adi" data-toggle="tooltip" data-placement="left" title="MEKAN TANITIM YAZISI" style="cursor: pointer;" style="float: left; " class="text-justify"><strong> {{ detaylar.mekan_tanitim }} </strong></p>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+
+                 <div class="col-sm-8 col-md-6  wow fadeInDown" data-wow-delay="0.7s">
+                    <div class="thumbnail">
+                      <img src="{% static 'images/tel.png' %}" alt="mekan bilgileri">
+                      <div class="caption">
+                        <h3 class="text-center text-info border-bottom-crimson">MEKAN ILETISIM</h3>
+                          <div class="form-group">
+                              <img src="{% static 'images/detaylar/adres.png' %}" alt="mekan_adi" style="float: left; margin-right: 5px;">
+                              <p name="mekan_adres" data-toggle="tooltip" data-placement="left" title="MEKAN ADRESI" style="cursor: pointer;" style="float: left; "><strong> {{ detaylar.mekan_adres }} </strong></p>
+                          </div>
+                          <div class="form-group">
+                              <img src="{% static 'images/detaylar/web.png' %}" alt="mekan_adi" style="float: left; margin-right: 5px;">
+                          <p name="web_site" data-toggle="tooltip" data-placement="left" title="MEKAN WEB SITE" style="cursor: pointer;" style="float: left; "><strong>
+                              <a href="{{ detaylar.mekan_web_site }}" target="_blank"> {{ detaylar.mekan_web_site }} </a></strong></p>
+                          </div>
+                          <div class="form-group">
+                              <img src="{% static 'images/detaylar/tel.png' %}" alt="mekan_adi" style="float: left; margin-right: 5px;">
+                          <p name="telefon" data-toggle="tooltip" data-placement="left" title="MEKAN TELEFON" style="cursor: pointer;" style="float: left; "><strong>{{ detaylar.mekan_telefon  }}</strong></p>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+
+            </div>
+
+      </div>
+   </div>
+
+            {% endfor %}
+
+
+
+
+{% endblock %}
